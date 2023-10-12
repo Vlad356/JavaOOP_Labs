@@ -36,4 +36,12 @@ public class CalculatorTest
     {
         assertEquals(23,StringCalculator.add("2,10\n6\n0,1,0,4"));
     }
+
+    @Test
+    void ShouldReturnSixWithCustomDelimiter()
+    {
+        assertEquals(6,StringCalculator.add("//;\n1;2;3"));
+    }
+
+
 }
