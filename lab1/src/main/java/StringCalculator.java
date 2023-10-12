@@ -22,6 +22,8 @@ public class StringCalculator {
             int delimiterIndex = numbers.indexOf("\n"); // Getting index of the end of custom delimiter
             // Getting custom delimiter from string (2 is the start of delimiter (after "//[" which indexes are 0,1,2 to delimiter-1 (]\n) struct)
             delimiter = numbers.substring(3,delimiterIndex-1);
+            // Support for multiple delimiters
+            delimiter = delimiter.replaceAll("\\]\\[", "|");;
             // Escape special characters in the custom delimiter
             delimiter = delimiter.replaceAll("([\\[\\]\\(\\)\\.\\*\\+\\?\\^\\$\\\\])", "\\\\$1");
             // Adding standard delimiters to the custom delimiter

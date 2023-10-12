@@ -78,5 +78,10 @@ public class CalculatorTest
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {StringCalculator.add("//[;@#]\n1;@#2;@#3;@#-6;@#-5");});
         assertEquals("Negatives not allowed: [-6, -5]", exception.getMessage());
     }
+    @Test
+    void ShouldReturnSixWhitMultiplySingleDelimiters()
+    {
+        assertEquals(6,StringCalculator.add("//[@][#]\n1@2#3@0"));
+    }
 }
 
