@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 public class StringCalculator {
     public static int add(String numbers)
     {
@@ -26,8 +28,22 @@ public class StringCalculator {
             delimiter = ",|\n|" + delimiter;
             // Getting string with numbers split by custom delimiter (removing //[delimiter]\n structure)
             numbers = numbers.substring(delimiterIndex+1);
+
         }
         String[] ArrayOfNums = numbers.split(delimiter); // Split string by delimiter
+        List<Integer> negative_numbers = new ArrayList<>(); // Creating list for catching negative integers
+        for (String arrayOfNum: ArrayOfNums)
+        {
+            int check_num = Integer.parseInt(arrayOfNum); // Converting every num from string to integer
+            if (check_num<0) // Condition for negative numbers
+            {
+                negative_numbers.add(check_num); // Adding negative number to list
+            }
+        }
+        if (!negative_numbers.isEmpty()) // Throwing exception if list contains any negative numbers
+        {
+            throw new IllegalArgumentException("Negatives not allowed: " + negative_numbers);
+        }
         for (String arrayOfNum : ArrayOfNums) // Count sum of split numbers
         {
             number_sum += Integer.parseInt(arrayOfNum);
@@ -40,6 +56,8 @@ public class StringCalculator {
         System.out.println("Result: " + StringCalculator.add(input1));
     }
 }
+
+
 
 
 
