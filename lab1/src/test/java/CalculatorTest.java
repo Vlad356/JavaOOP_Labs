@@ -21,4 +21,15 @@ public class CalculatorTest
         assertEquals(3,StringCalculator.add("1,2"));
     }
 
+    @Test
+    void ShouldReturnSeventyFor5Elements()
+    {
+        assertEquals(70,StringCalculator.add("10,20,30,5,5"));
+    }
+    @Test
+    void ShouldReturnSeventyFor7Elements()
+    {
+        assertEquals(70,StringCalculator.add("20,20,30,0,0,0,0"));
+    }
+
 }

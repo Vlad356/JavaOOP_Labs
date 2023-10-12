@@ -7,13 +7,9 @@ public class StringCalculator {
             return 0;
         }
         String[] ArrayOfNums = numbers.split(",");
-        for (int i = 0; i < ArrayOfNums.length; i++)
+        for (String arrayOfNum : ArrayOfNums)
         {
-            number_sum += Integer.parseInt(ArrayOfNums[i]);
-        }
-        if (ArrayOfNums.length > 2)
-        {
-            throw new Error("Inputted more than 2 numbers!");
+            number_sum += Integer.parseInt(arrayOfNum);
         }
         return number_sum;
     }
