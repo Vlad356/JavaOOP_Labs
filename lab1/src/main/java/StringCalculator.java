@@ -17,4 +17,9 @@ public class StringCalculator {
         }
         return number_sum;
     }
+    public static void main(String[] args) {
+        // Test case
+        String input1 = "";
+        System.out.println("Result: " + StringCalculator.add(input1));
+    }
 }
