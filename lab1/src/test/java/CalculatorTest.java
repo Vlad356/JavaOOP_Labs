@@ -36,6 +36,11 @@ public class CalculatorTest
     {
         assertEquals(23,StringCalculator.add("2,10\n6\n0,1,0,4"));
     }
+    @Test
+    void shouldReturnExceptionForWrongDelimiterStruct() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {StringCalculator.add("1,2,3\n,6,5");});
+        assertEquals("Unsupportable string input (it shouldn't contains structures (,\\n) or ('\\n',)", exception.getMessage());
+    }
 
     @Test
     void ShouldReturnSixWithCustomDelimiter()
