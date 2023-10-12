@@ -83,5 +83,9 @@ public class CalculatorTest
     {
         assertEquals(6,StringCalculator.add("//[@][#]\n1@2#3@0"));
     }
+    @Test
+    void ShouldReturnResultWhitMultiplyDelimiters()
+    {
+        assertEquals(12,StringCalculator.add("//[fpm][#][K][@@]\n1@@2#3fpm5K1"));
+    }
 }
-
