@@ -46,7 +46,10 @@ public class StringCalculator {
         }
         for (String arrayOfNum : ArrayOfNums) // Count sum of split numbers
         {
-            number_sum += Integer.parseInt(arrayOfNum);
+            if (Integer.parseInt(arrayOfNum)<= 1000) // Summing only numbers which are less than 1001
+            {
+                number_sum += Integer.parseInt(arrayOfNum);
+            }
         }
         return number_sum; // Return sum of split numbers
     }

@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -53,5 +52,16 @@ public class CalculatorTest
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {StringCalculator.add("//;\n1;2;3;-6;-5");});
         assertEquals("Negatives not allowed: [-6, -5]", exception.getMessage());
     }
+    @Test
+    void ShouldReturnSumOfNumsLess1001()
+    {
+        assertEquals(1999,StringCalculator.add("1000,999,1001"));
+    }
+    @Test
+    void ShouldReturnSumOfNumsLess1001WithCustomDelimiter()
+    {
+        assertEquals(2008,StringCalculator.add("//g\n1000g999g1001g2g3g4"));
+    }
+
 }
 
