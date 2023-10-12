@@ -31,5 +31,9 @@ public class CalculatorTest
     {
         assertEquals(70,StringCalculator.add("20,20,30,0,0,0,0"));
     }
-
+    @Test
+    void ShouldReturnTwentyThreeFor7ElementsWithNOrComa()
+    {
+        assertEquals(23,StringCalculator.add("2,10\n6\n0,1,0,4"));
+    }
 }
