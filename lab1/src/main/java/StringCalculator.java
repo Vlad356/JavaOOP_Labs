@@ -11,24 +11,23 @@ public class StringCalculator {
         }
         if (numbers.contains(",\n")) // Throw error for ,\n structure between numbers
         {
-            throw new Error("Unsupportable string input (it shouldn't contains structures (,\\n) or (\\n,)");
+            throw new IllegalArgumentException("Unsupportable string input (it shouldn't contains structures (,\\n) or (\\n,)");
         }
         if (numbers.contains("\n,")) // Throw error for \n, structure between numbers
         {
-            throw new Error("Unsupportable string input (it shouldn't contains structures (,\\n) or ('\\n',)");
+            throw new IllegalArgumentException("Unsupportable string input (it shouldn't contains structures (,\\n) or ('\\n',)");
         }
         if (numbers.startsWith("//")) // Condition for taking custom delimiter
         {
             int delimiterIndex = numbers.indexOf("\n"); // Getting index of the end of custom delimiter
-            // Getting custom delimiter from string (2 is the start of delimiter (after "//" which indexes are 0 and 1)
-            delimiter = numbers.substring(2,delimiterIndex);
+            // Getting custom delimiter from string (2 is the start of delimiter (after "//[" which indexes are 0,1,2 to delimiter-1 (]\n) struct)
+            delimiter = numbers.substring(3,delimiterIndex-1);
             // Escape special characters in the custom delimiter
             delimiter = delimiter.replaceAll("([\\[\\]\\(\\)\\.\\*\\+\\?\\^\\$\\\\])", "\\\\$1");
             // Adding standard delimiters to the custom delimiter
             delimiter = ",|\n|" + delimiter;
             // Getting string with numbers split by custom delimiter (removing //[delimiter]\n structure)
             numbers = numbers.substring(delimiterIndex+1);
-
         }
         String[] ArrayOfNums = numbers.split(delimiter); // Split string by delimiter
         List<Integer> negative_numbers = new ArrayList<>(); // Creating list for catching negative integers

@@ -45,7 +45,7 @@ public class CalculatorTest
     @Test
     void ShouldReturnSixWithCustomDelimiter()
     {
-        assertEquals(6,StringCalculator.add("//;\n1;2;3"));
+        assertEquals(6,StringCalculator.add("//[;]\n1;2;3"));
     }
     @Test
     void shouldReturnExceptionWithNegatives() {
@@ -54,7 +54,7 @@ public class CalculatorTest
     }
     @Test
     void shouldReturnExceptionWithNegativesForCustomDelimiter() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {StringCalculator.add("//;\n1;2;3;-6;-5");});
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {StringCalculator.add("//[;]\n1;2;3;-6;-5");});
         assertEquals("Negatives not allowed: [-6, -5]", exception.getMessage());
     }
     @Test
@@ -65,8 +65,18 @@ public class CalculatorTest
     @Test
     void ShouldReturnSumOfNumsLess1001WithCustomDelimiter()
     {
-        assertEquals(2008,StringCalculator.add("//g\n1000g999g1001g2g3g4"));
+        assertEquals(2008,StringCalculator.add("//[g]\n1000g999g1001g2g3g4"));
     }
-
+    @Test
+    void ShouldReturnSixWhitMultiplyDelimiter()
+    {
+        assertEquals(6,StringCalculator.add("//['@]\n1'@2'@3"));
+    }
+    @Test
+    void shouldReturnExceptionWithNegativesForCustomMultiplyDelimiter()
+    {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {StringCalculator.add("//[;@#]\n1;@#2;@#3;@#-6;@#-5");});
+        assertEquals("Negatives not allowed: [-6, -5]", exception.getMessage());
+    }
 }
 
