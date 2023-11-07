@@ -1,0 +1,418 @@
+Index: lab2/src/test/java/Matrix_Test.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import org.junit.jupiter.api.Test;\r\nimport static org.junit.jupiter.api.Assertions.*;\r\n\r\npublic class Matrix_Test {\r\n\r\n    @Test\r\n    void testEmptyMatrixCreation() {\r\n        ImmutableMatrix matrix = new ImmutableMatrix();\r\n        assertEquals(0, matrix.getDimensions()[0]);\r\n        assertEquals(0, matrix.getDimensions()[1]);\r\n    }\r\n\r\n    @Test\r\n    void testMatrixCreationWithDimensions() {\r\n        int rows = 3;\r\n        int cols = 4;\r\n        ImmutableMatrix matrix = new ImmutableMatrix(rows, cols);\r\n        assertEquals(rows, matrix.getDimensions()[0]);\r\n        assertEquals(cols, matrix.getDimensions()[1]);\r\n    }\r\n\r\n    @Test\r\n    void testMatrixCopyConstructor() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}};\r\n        ImmutableMatrix originalMatrix = new ImmutableMatrix(2, 3).fillMatrix(values);\r\n        ImmutableMatrix copiedMatrix = new ImmutableMatrix(originalMatrix);\r\n\r\n        assertEquals(originalMatrix, copiedMatrix);\r\n        assertNotSame(originalMatrix, copiedMatrix); // Ensure a deep copy\r\n    }\r\n\r\n    @Test\r\n    void testFillMatrix() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(2, 3).fillMatrix(values);\r\n\r\n        for (int i = 0; i < 2; i++) {\r\n            assertArrayEquals(values[i], matrix.getRow(i));\r\n        }\r\n    }\r\n\r\n    @Test\r\n    void testGetElement() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(2, 3).fillMatrix(values);\r\n\r\n        assertEquals(2, matrix.getElement(0, 1));\r\n        assertEquals(4, matrix.getElement(1, 0));\r\n    }\r\n\r\n    @Test\r\n    void testGetRow() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(2, 3).fillMatrix(values);\r\n\r\n        assertArrayEquals(values[1], matrix.getRow(1));\r\n    }\r\n\r\n    @Test\r\n    void testGetColumn() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(2, 3).fillMatrix(values);\r\n\r\n        int[] expectedColumn = {2, 5};\r\n        assertArrayEquals(expectedColumn, matrix.getColumn(1));\r\n    }\r\n\r\n    @Test\r\n    void testEquality() {\r\n        int[][] values1 = {{1, 2}, {3, 4}};\r\n        int[][] values2 = {{1, 2}, {3, 4}};\r\n\r\n        ImmutableMatrix matrix1 = new ImmutableMatrix(2, 2).fillMatrix(values1);\r\n        ImmutableMatrix matrix2 = new ImmutableMatrix(2, 2).fillMatrix(values2);\r\n\r\n        assertEquals(matrix1, matrix2);\r\n    }\r\n\r\n    @Test\r\n    void testInequality() {\r\n        int[][] values1 = {{1, 2}, {3, 4}};\r\n        int[][] values2 = {{5, 6}, {7, 8}};\r\n\r\n        ImmutableMatrix matrix1 = new ImmutableMatrix(2, 2).fillMatrix(values1);\r\n        ImmutableMatrix matrix2 = new ImmutableMatrix(2, 2).fillMatrix(values2);\r\n\r\n        assertNotEquals(matrix1, matrix2);\r\n    }\r\n    @Test\r\n    void testImmutability() {\r\n        int[][] values = {{1, 2}, {3, 4}};\r\n        ImmutableMatrix originalMatrix = new ImmutableMatrix(2, 2).fillMatrix(values);\r\n        ImmutableMatrix modifiedMatrix = originalMatrix.fillMatrix(new int[][]{{5, 6}, {7, 8}});\r\n\r\n        // Ensure the original matrix remains unchanged\r\n        assertNotEquals(originalMatrix, modifiedMatrix);\r\n        assertArrayEquals(values[0], originalMatrix.getRow(0));\r\n        assertArrayEquals(values[1], originalMatrix.getRow(1));\r\n    }\r\n    @Test\r\n    void testMatrixAddition() {\r\n        int[][] values1 = {{1, 2}, {3, 4}};\r\n        int[][] values2 = {{5, 6}, {7, 8}};\r\n\r\n        ImmutableMatrix matrix1 = new ImmutableMatrix(2, 2).fillMatrix(values1);\r\n        ImmutableMatrix matrix2 = new ImmutableMatrix(2, 2).fillMatrix(values2);\r\n        ImmutableMatrix resultMatrix = matrix1.add(matrix2);\r\n\r\n        int[][] expectedValues = {{6, 8}, {10, 12}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(2, 2).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, resultMatrix);\r\n    }\r\n\r\n    @Test\r\n    void testScalarMultiplication() {\r\n        int[][] values = {{1, 2}, {3, 4}};\r\n        ImmutableMatrix originalMatrix = new ImmutableMatrix(2, 2).fillMatrix(values);\r\n        int scalar = 3;\r\n        ImmutableMatrix resultMatrix = originalMatrix.multiplyScalar(scalar);\r\n\r\n        int[][] expectedValues = {{3, 6}, {9, 12}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(2, 2).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, resultMatrix);\r\n    }\r\n    @Test\r\n    void testMatrixMultiplication() {\r\n        int[][] values1 = {{1, 2}, {3, 4}};\r\n        int[][] values2 = {{5, 6}, {7, 8}};\r\n\r\n        ImmutableMatrix matrix1 = new ImmutableMatrix(2, 2).fillMatrix(values1);\r\n        ImmutableMatrix matrix2 = new ImmutableMatrix(2, 2).fillMatrix(values2);\r\n        ImmutableMatrix resultMatrix = matrix1.multiply(matrix2);\r\n\r\n        int[][] expectedValues = {{19, 22}, {43, 50}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(2, 2).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, resultMatrix);\r\n    }\r\n\r\n    @Test\r\n    void testInvalidMatrixMultiplicationDimensions() {\r\n        int[][] values1 = {{1, 2}, {3, 4}};\r\n        int[][] values2 = {{5, 6}, {7, 8},{9,10}};\r\n\r\n        ImmutableMatrix matrix1 = new ImmutableMatrix(2, 2).fillMatrix(values1);\r\n        ImmutableMatrix matrix2 = new ImmutableMatrix(3, 2).fillMatrix(values2);\r\n\r\n        assertThrows(IllegalArgumentException.class, () -> matrix1.multiply(matrix2));\r\n    }\r\n    @Test\r\n    void testMatrixTranspose() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(2, 3).fillMatrix(values);\r\n        ImmutableMatrix transposedMatrix = matrix.transpose();\r\n\r\n        int[][] expectedValues = {{1, 4}, {2, 5}, {3, 6}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(3, 2).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, transposedMatrix);\r\n    }\r\n    @Test\r\n    void testDiagonalMatrixCreation() {\r\n        int[] diagonalValues = {1, 2, 3};\r\n        ImmutableMatrix diagonalMatrix = ImmutableMatrix.DiagonalMatrix(diagonalValues);\r\n\r\n        int[][] expectedValues = {{1, 0, 0}, {0, 2, 0}, {0, 0, 3}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(3, 3).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, diagonalMatrix);\r\n    }\r\n    @Test\r\n    void testIdentityMatrixCreation() {\r\n        ImmutableMatrix IdentityMatrix = ImmutableMatrix.IdentityMatrix(3);\r\n\r\n        int[][] expectedValues = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(3, 3).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, IdentityMatrix);\r\n    }\r\n    @Test\r\n    void testUpperTriangularMatrix() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(3, 3).fillMatrix(values);\r\n        ImmutableMatrix upperTriangularMatrix = matrix.UpperTriangularMatrix();\r\n\r\n        int[][] expectedValues = {{1, 2, 3}, {0, 5, 6}, {0, 0, 9}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(3, 3).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, upperTriangularMatrix);\r\n    }\r\n\r\n    @Test\r\n    void testLowerTriangularMatrix() {\r\n        int[][] values = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\r\n        ImmutableMatrix matrix = new ImmutableMatrix(3, 3).fillMatrix(values);\r\n        ImmutableMatrix lowerTriangularMatrix = matrix.LowerTriangularMatrix();\r\n\r\n        int[][] expectedValues = {{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};\r\n        ImmutableMatrix expectedMatrix = new ImmutableMatrix(3, 3).fillMatrix(expectedValues);\r\n\r\n        assertEquals(expectedMatrix, lowerTriangularMatrix);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lab2/src/test/java/Matrix_Test.java b/lab2/src/test/java/Matrix_Test.java
+--- a/lab2/src/test/java/Matrix_Test.java	
++++ b/lab2/src/test/java/Matrix_Test.java	
+@@ -64,6 +64,15 @@
+         int[] expectedColumn = {2, 5};
+         assertArrayEquals(expectedColumn, matrix.getColumn(1));
+     }
++    @Test
++    public void testGetDimensions() {
++        int[][] data = {{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
++
++        ImmutableMatrix matrix = new ImmutableMatrix(4, 3).fillMatrix(data);
++        int[] dimensions = matrix.getDimensions();
++
++        assertArrayEquals(new int[]{4, 3}, dimensions);
++    }
+ 
+     @Test
+     void testEquality() {
+Index: lab2/build/reports/tests/test/index.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\r\n<title>Test results - Test Summary</title>\r\n<link href=\"css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<script src=\"js/report.js\" type=\"text/javascript\"></script>\r\n</head>\r\n<body>\r\n<div id=\"content\">\r\n<h1>Test Summary</h1>\r\n<div id=\"summary\">\r\n<table>\r\n<tr>\r\n<td>\r\n<div class=\"summaryGroup\">\r\n<table>\r\n<tr>\r\n<td>\r\n<div class=\"infoBox\" id=\"tests\">\r\n<div class=\"counter\">1</div>\r\n<p>tests</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"failures\">\r\n<div class=\"counter\">0</div>\r\n<p>failures</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"ignored\">\r\n<div class=\"counter\">0</div>\r\n<p>ignored</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"duration\">\r\n<div class=\"counter\">0.012s</div>\r\n<p>duration</p>\r\n</div>\r\n</td>\r\n</tr>\r\n</table>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox success\" id=\"successRate\">\r\n<div class=\"percent\">100%</div>\r\n<p>successful</p>\r\n</div>\r\n</td>\r\n</tr>\r\n</table>\r\n</div>\r\n<div id=\"tabs\">\r\n<ul class=\"tabLinks\">\r\n<li>\r\n<a href=\"#tab0\">Packages</a>\r\n</li>\r\n<li>\r\n<a href=\"#tab1\">Classes</a>\r\n</li>\r\n</ul>\r\n<div id=\"tab0\" class=\"tab\">\r\n<h2>Packages</h2>\r\n<table>\r\n<thead>\r\n<tr>\r\n<th>Package</th>\r\n<th>Tests</th>\r\n<th>Failures</th>\r\n<th>Ignored</th>\r\n<th>Duration</th>\r\n<th>Success rate</th>\r\n</tr>\r\n</thead>\r\n<tbody>\r\n<tr>\r\n<td class=\"success\">\r\n<a href=\"packages/default-package.html\">default-package</a>\r\n</td>\r\n<td>1</td>\r\n<td>0</td>\r\n<td>0</td>\r\n<td>0.012s</td>\r\n<td class=\"success\">100%</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</div>\r\n<div id=\"tab1\" class=\"tab\">\r\n<h2>Classes</h2>\r\n<table>\r\n<thead>\r\n<tr>\r\n<th>Class</th>\r\n<th>Tests</th>\r\n<th>Failures</th>\r\n<th>Ignored</th>\r\n<th>Duration</th>\r\n<th>Success rate</th>\r\n</tr>\r\n</thead>\r\n<tbody>\r\n<tr>\r\n<td class=\"success\">\r\n<a href=\"classes/Matrix_Test.html\">Matrix_Test</a>\r\n</td>\r\n<td>1</td>\r\n<td>0</td>\r\n<td>0</td>\r\n<td>0.012s</td>\r\n<td class=\"success\">100%</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</div>\r\n</div>\r\n<div id=\"footer\">\r\n<p>\r\n<div>\r\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\r\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\r\n</label>\r\n</div>Generated by \r\n<a href=\"http://www.gradle.org\">Gradle 8.3</a> at 3 нояб. 2023 г., 18:33:41</p>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lab2/build/reports/tests/test/index.html b/lab2/build/reports/tests/test/index.html
+--- a/lab2/build/reports/tests/test/index.html	
++++ b/lab2/build/reports/tests/test/index.html	
+@@ -20,7 +20,7 @@
+ <tr>
+ <td>
+ <div class="infoBox" id="tests">
+-<div class="counter">1</div>
++<div class="counter">20</div>
+ <p>tests</p>
+ </div>
+ </td>
+@@ -38,7 +38,7 @@
+ </td>
+ <td>
+ <div class="infoBox" id="duration">
+-<div class="counter">0.012s</div>
++<div class="counter">0.021s</div>
+ <p>duration</p>
+ </div>
+ </td>
+@@ -82,10 +82,10 @@
+ <td class="success">
+ <a href="packages/default-package.html">default-package</a>
+ </td>
+-<td>1</td>
++<td>20</td>
+ <td>0</td>
+ <td>0</td>
+-<td>0.012s</td>
++<td>0.021s</td>
+ <td class="success">100%</td>
+ </tr>
+ </tbody>
+@@ -109,10 +109,10 @@
+ <td class="success">
+ <a href="classes/Matrix_Test.html">Matrix_Test</a>
+ </td>
+-<td>1</td>
++<td>20</td>
+ <td>0</td>
+ <td>0</td>
+-<td>0.012s</td>
++<td>0.021s</td>
+ <td class="success">100%</td>
+ </tr>
+ </tbody>
+@@ -126,7 +126,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 8.3</a> at 3 нояб. 2023 г., 18:33:41</p>
++<a href="http://www.gradle.org">Gradle 8.3</a> at 3 нояб. 2023 г., 18:57:59</p>
+ </div>
+ </div>
+ </body>
+Index: lab2/build/reports/tests/test/classes/Matrix_Test.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\r\n<title>Test results - Class Matrix_Test</title>\r\n<link href=\"../css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<link href=\"../css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<script src=\"../js/report.js\" type=\"text/javascript\"></script>\r\n</head>\r\n<body>\r\n<div id=\"content\">\r\n<h1>Class Matrix_Test</h1>\r\n<div class=\"breadcrumbs\">\r\n<a href=\"../index.html\">all</a> &gt; \r\n<a href=\"../packages/default-package.html\">default-package</a> &gt; Matrix_Test</div>\r\n<div id=\"summary\">\r\n<table>\r\n<tr>\r\n<td>\r\n<div class=\"summaryGroup\">\r\n<table>\r\n<tr>\r\n<td>\r\n<div class=\"infoBox\" id=\"tests\">\r\n<div class=\"counter\">1</div>\r\n<p>tests</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"failures\">\r\n<div class=\"counter\">0</div>\r\n<p>failures</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"ignored\">\r\n<div class=\"counter\">0</div>\r\n<p>ignored</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"duration\">\r\n<div class=\"counter\">0.012s</div>\r\n<p>duration</p>\r\n</div>\r\n</td>\r\n</tr>\r\n</table>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox success\" id=\"successRate\">\r\n<div class=\"percent\">100%</div>\r\n<p>successful</p>\r\n</div>\r\n</td>\r\n</tr>\r\n</table>\r\n</div>\r\n<div id=\"tabs\">\r\n<ul class=\"tabLinks\">\r\n<li>\r\n<a href=\"#tab0\">Tests</a>\r\n</li>\r\n</ul>\r\n<div id=\"tab0\" class=\"tab\">\r\n<h2>Tests</h2>\r\n<table>\r\n<thead>\r\n<tr>\r\n<th>Test</th>\r\n<th>Duration</th>\r\n<th>Result</th>\r\n</tr>\r\n</thead>\r\n<tr>\r\n<td class=\"success\">testLowerTriangularMatrix()</td>\r\n<td class=\"success\">0.012s</td>\r\n<td class=\"success\">passed</td>\r\n</tr>\r\n</table>\r\n</div>\r\n</div>\r\n<div id=\"footer\">\r\n<p>\r\n<div>\r\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\r\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\r\n</label>\r\n</div>Generated by \r\n<a href=\"http://www.gradle.org\">Gradle 8.3</a> at 3 нояб. 2023 г., 18:33:41</p>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lab2/build/reports/tests/test/classes/Matrix_Test.html b/lab2/build/reports/tests/test/classes/Matrix_Test.html
+--- a/lab2/build/reports/tests/test/classes/Matrix_Test.html	
++++ b/lab2/build/reports/tests/test/classes/Matrix_Test.html	
+@@ -23,7 +23,7 @@
+ <tr>
+ <td>
+ <div class="infoBox" id="tests">
+-<div class="counter">1</div>
++<div class="counter">20</div>
+ <p>tests</p>
+ </div>
+ </td>
+@@ -41,7 +41,7 @@
+ </td>
+ <td>
+ <div class="infoBox" id="duration">
+-<div class="counter">0.012s</div>
++<div class="counter">0.021s</div>
+ <p>duration</p>
+ </div>
+ </td>
+@@ -75,10 +75,105 @@
+ </tr>
+ </thead>
+ <tr>
++<td class="success">testDiagonalMatrixCreation()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testEmptyMatrixCreation()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testEquality()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testFillMatrix()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testGetColumn()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testGetDimensions()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testGetElement()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testGetRow()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testIdentityMatrixCreation()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testImmutability()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testInequality()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testInvalidMatrixMultiplicationDimensions()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
+ <td class="success">testLowerTriangularMatrix()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testMatrixAddition()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testMatrixCopyConstructor()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testMatrixCreationWithDimensions()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testMatrixMultiplication()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testMatrixTranspose()</td>
+ <td class="success">0.012s</td>
+ <td class="success">passed</td>
+ </tr>
++<tr>
++<td class="success">testScalarMultiplication()</td>
++<td class="success">0.001s</td>
++<td class="success">passed</td>
++</tr>
++<tr>
++<td class="success">testUpperTriangularMatrix()</td>
++<td class="success">0s</td>
++<td class="success">passed</td>
++</tr>
+ </table>
+ </div>
+ </div>
+@@ -89,7 +184,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 8.3</a> at 3 нояб. 2023 г., 18:33:41</p>
++<a href="http://www.gradle.org">Gradle 8.3</a> at 3 нояб. 2023 г., 18:57:59</p>
+ </div>
+ </div>
+ </body>
+Index: lab2/build/test-results/test/TEST-Matrix_Test.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<testsuite name=\"Matrix_Test\" tests=\"1\" skipped=\"0\" failures=\"0\" errors=\"0\" timestamp=\"2023-11-03T16:33:41\" hostname=\"DESKTOP-CD7ADQ1\" time=\"0.012\">\r\n  <properties/>\r\n  <testcase name=\"testLowerTriangularMatrix()\" classname=\"Matrix_Test\" time=\"0.012\"/>\r\n  <system-out><![CDATA[]]></system-out>\r\n  <system-err><![CDATA[]]></system-err>\r\n</testsuite>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lab2/build/test-results/test/TEST-Matrix_Test.xml b/lab2/build/test-results/test/TEST-Matrix_Test.xml
+--- a/lab2/build/test-results/test/TEST-Matrix_Test.xml	
++++ b/lab2/build/test-results/test/TEST-Matrix_Test.xml	
+@@ -1,7 +1,26 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<testsuite name="Matrix_Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-03T16:33:41" hostname="DESKTOP-CD7ADQ1" time="0.012">
++<testsuite name="Matrix_Test" tests="20" skipped="0" failures="0" errors="0" timestamp="2023-11-03T16:57:59" hostname="DESKTOP-CD7ADQ1" time="0.032">
+   <properties/>
+-  <testcase name="testLowerTriangularMatrix()" classname="Matrix_Test" time="0.012"/>
++  <testcase name="testMatrixTranspose()" classname="Matrix_Test" time="0.012"/>
++  <testcase name="testEmptyMatrixCreation()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testFillMatrix()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testGetElement()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testDiagonalMatrixCreation()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testMatrixMultiplication()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testLowerTriangularMatrix()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testMatrixCreationWithDimensions()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testInequality()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testIdentityMatrixCreation()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testScalarMultiplication()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testMatrixCopyConstructor()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testGetColumn()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testEquality()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testGetRow()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testImmutability()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testInvalidMatrixMultiplicationDimensions()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testMatrixAddition()" classname="Matrix_Test" time="0.0"/>
++  <testcase name="testGetDimensions()" classname="Matrix_Test" time="0.001"/>
++  <testcase name="testUpperTriangularMatrix()" classname="Matrix_Test" time="0.0"/>
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+ </testsuite>
+Index: lab2/build/reports/tests/test/packages/default-package.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\r\n<title>Test results - Default package</title>\r\n<link href=\"../css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<link href=\"../css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<script src=\"../js/report.js\" type=\"text/javascript\"></script>\r\n</head>\r\n<body>\r\n<div id=\"content\">\r\n<h1>Default package</h1>\r\n<div class=\"breadcrumbs\">\r\n<a href=\"../index.html\">all</a> &gt; default-package</div>\r\n<div id=\"summary\">\r\n<table>\r\n<tr>\r\n<td>\r\n<div class=\"summaryGroup\">\r\n<table>\r\n<tr>\r\n<td>\r\n<div class=\"infoBox\" id=\"tests\">\r\n<div class=\"counter\">1</div>\r\n<p>tests</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"failures\">\r\n<div class=\"counter\">0</div>\r\n<p>failures</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"ignored\">\r\n<div class=\"counter\">0</div>\r\n<p>ignored</p>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox\" id=\"duration\">\r\n<div class=\"counter\">0.012s</div>\r\n<p>duration</p>\r\n</div>\r\n</td>\r\n</tr>\r\n</table>\r\n</div>\r\n</td>\r\n<td>\r\n<div class=\"infoBox success\" id=\"successRate\">\r\n<div class=\"percent\">100%</div>\r\n<p>successful</p>\r\n</div>\r\n</td>\r\n</tr>\r\n</table>\r\n</div>\r\n<div id=\"tabs\">\r\n<ul class=\"tabLinks\">\r\n<li>\r\n<a href=\"#tab0\">Classes</a>\r\n</li>\r\n</ul>\r\n<div id=\"tab0\" class=\"tab\">\r\n<h2>Classes</h2>\r\n<table>\r\n<thread>\r\n<tr>\r\n<th>Class</th>\r\n<th>Tests</th>\r\n<th>Failures</th>\r\n<th>Ignored</th>\r\n<th>Duration</th>\r\n<th>Success rate</th>\r\n</tr>\r\n</thread>\r\n<tr>\r\n<td class=\"success\">\r\n<a href=\"../classes/Matrix_Test.html\">Matrix_Test</a>\r\n</td>\r\n<td>1</td>\r\n<td>0</td>\r\n<td>0</td>\r\n<td>0.012s</td>\r\n<td class=\"success\">100%</td>\r\n</tr>\r\n</table>\r\n</div>\r\n</div>\r\n<div id=\"footer\">\r\n<p>\r\n<div>\r\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\r\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\r\n</label>\r\n</div>Generated by \r\n<a href=\"http://www.gradle.org\">Gradle 8.3</a> at 3 нояб. 2023 г., 18:33:41</p>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lab2/build/reports/tests/test/packages/default-package.html b/lab2/build/reports/tests/test/packages/default-package.html
+--- a/lab2/build/reports/tests/test/packages/default-package.html	
++++ b/lab2/build/reports/tests/test/packages/default-package.html	
+@@ -22,7 +22,7 @@
+ <tr>
+ <td>
+ <div class="infoBox" id="tests">
+-<div class="counter">1</div>
++<div class="counter">20</div>
+ <p>tests</p>
+ </div>
+ </td>
+@@ -40,7 +40,7 @@
+ </td>
+ <td>
+ <div class="infoBox" id="duration">
+-<div class="counter">0.012s</div>
++<div class="counter">0.021s</div>
+ <p>duration</p>
+ </div>
+ </td>
+@@ -80,10 +80,10 @@
+ <td class="success">
+ <a href="../classes/Matrix_Test.html">Matrix_Test</a>
+ </td>
+-<td>1</td>
++<td>20</td>
+ <td>0</td>
+ <td>0</td>
+-<td>0.012s</td>
++<td>0.021s</td>
+ <td class="success">100%</td>
+ </tr>
+ </table>
+@@ -96,7 +96,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 8.3</a> at 3 нояб. 2023 г., 18:33:41</p>
++<a href="http://www.gradle.org">Gradle 8.3</a> at 3 нояб. 2023 г., 18:57:59</p>
+ </div>
+ </div>
+ </body>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"244eb303-b070-46a6-9b1c-ba939f26f465\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/.gradle/8.3/executionHistory/executionHistory.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/.gradle/8.3/executionHistory/executionHistory.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/.gradle/8.3/executionHistory/executionHistory.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/.gradle/8.3/executionHistory/executionHistory.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/.gradle/8.3/fileHashes/fileHashes.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/.gradle/8.3/fileHashes/fileHashes.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/.gradle/8.3/fileHashes/fileHashes.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/.gradle/8.3/fileHashes/fileHashes.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/.gradle/8.3/fileHashes/resourceHashesCache.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/.gradle/8.3/fileHashes/resourceHashesCache.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/classes/java/main/ImmutableMatrix.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/classes/java/main/ImmutableMatrix.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/classes/java/test/Matrix_Test.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/classes/java/test/Matrix_Test.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/reports/tests/test/classes/Matrix_Test.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/reports/tests/test/classes/Matrix_Test.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/reports/tests/test/index.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/reports/tests/test/index.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/reports/tests/test/packages/default-package.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/reports/tests/test/packages/default-package.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/test-results/test/TEST-Matrix_Test.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/test-results/test/TEST-Matrix_Test.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/test-results/test/binary/results.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/test-results/test/binary/results.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/tmp/compileJava/compileTransaction/stash-dir/ImmutableMatrix.class.uniqueId0\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/tmp/compileJava/compileTransaction/stash-dir/ImmutableMatrix.class.uniqueId0\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/tmp/compileJava/previous-compilation-data.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/tmp/compileJava/previous-compilation-data.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/tmp/compileTestJava/compileTransaction/stash-dir/Matrix_Test.class.uniqueId0\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/tmp/compileTestJava/compileTransaction/stash-dir/Matrix_Test.class.uniqueId0\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/build/tmp/compileTestJava/previous-compilation-data.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/build/tmp/compileTestJava/previous-compilation-data.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/src/main/java/ImmutableMatrix.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/src/main/java/ImmutableMatrix.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/lab2/src/test/java/Matrix_Test.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/lab2/src/test/java/Matrix_Test.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExportToHTMLSettings\">\r\n    <option name=\"OUTPUT_DIRECTORY\" value=\"E:\\JavaOOP_Labs\\htmlReport\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$/lab1\">\r\n      <ProjectState />\r\n    </projectState>\r\n    <projectState path=\"$PROJECT_DIR$/lab2\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$\">\r\n          <activation />\r\n        </task>\r\n        <task path=\"$PROJECT_DIR$/lab1\">\r\n          <activation />\r\n        </task>\r\n        <task path=\"$PROJECT_DIR$/lab1/src\">\r\n          <activation />\r\n        </task>\r\n        <task path=\"$PROJECT_DIR$/lab1/src/main/java\">\r\n          <activation />\r\n        </task>\r\n        <task path=\"$PROJECT_DIR$/lab2\">\r\n          <activation />\r\n        </task>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand />\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/lab2/src/main/java/ImmutableMatrix.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 5\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2WfigdlwEZ4N7EqtXW3NWA9CO0p\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;jbr-17&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;E:/JavaOOP_Labs/lab1/settings.gradle.kts&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveClassesOrPackagesDialog.RECENTS_KEY\">\r\n      <recent name=\"\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Gradle.Matrix_Test.testLowerTriangularMatrix\">\r\n    <configuration name=\"Matrix_Test\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/lab2\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\":test\" />\r\n            <option value=\"--tests\" />\r\n            <option value=\"&quot;Matrix_Test&quot;\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>true</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Matrix_Test.testDiagonalMatrixCreation\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/lab2\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\":test\" />\r\n            <option value=\"--tests\" />\r\n            <option value=\"&quot;Matrix_Test.testDiagonalMatrixCreation&quot;\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>true</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Matrix_Test.testIdentityMatrixCreation\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/lab2\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\":test\" />\r\n            <option value=\"--tests\" />\r\n            <option value=\"&quot;Matrix_Test.testIdentityMatrixCreation&quot;\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>true</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Matrix_Test.testLowerTriangularMatrix\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/lab2\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\":test\" />\r\n            <option value=\"--tests\" />\r\n            <option value=\"&quot;Matrix_Test.testLowerTriangularMatrix&quot;\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>true</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Matrix_Test.testUpperTriangularMatrix\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/lab2\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\":test\" />\r\n            <option value=\"--tests\" />\r\n            <option value=\"&quot;Matrix_Test.testUpperTriangularMatrix&quot;\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>true</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Gradle.Matrix_Test.testDiagonalMatrixCreation\" />\r\n      <item itemvalue=\"Gradle.Matrix_Test.testIdentityMatrixCreation\" />\r\n      <item itemvalue=\"Gradle.Matrix_Test.testLowerTriangularMatrix\" />\r\n      <item itemvalue=\"Gradle.Matrix_Test.testUpperTriangularMatrix\" />\r\n      <item itemvalue=\"Gradle.Matrix_Test\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Gradle.Matrix_Test.testLowerTriangularMatrix\" />\r\n        <item itemvalue=\"Gradle.Matrix_Test.testUpperTriangularMatrix\" />\r\n        <item itemvalue=\"Gradle.Matrix_Test\" />\r\n        <item itemvalue=\"Gradle.Matrix_Test.testIdentityMatrixCreation\" />\r\n        <item itemvalue=\"Gradle.Matrix_Test.testDiagonalMatrixCreation\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"244eb303-b070-46a6-9b1c-ba939f26f465\" name=\"Changes\" comment=\"\" />\r\n      <created>1697130148097</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1697130148097</updated>\r\n      <workItem from=\"1697130149777\" duration=\"41000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$Matrix.ic\" NAME=\"Matrix Coverage Results\" MODIFIED=\"1698949285592\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$Matrix_Test_testCreateMatrix.ic\" NAME=\"Matrix_Test.testCreateMatrix Coverage Results\" MODIFIED=\"1698952932731\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$Matrix_Test.ic\" NAME=\"Matrix_Test Coverage Results\" MODIFIED=\"1699026129516\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$Matrix_Test_testFillMatrix.ic\" NAME=\"Matrix_Test.testFillMatrix Coverage Results\" MODIFIED=\"1698966731654\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$Matrix_Test_testImmutability.ic\" NAME=\"Matrix_Test.testImmutability Coverage Results\" MODIFIED=\"1698965158806\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$Matrix_Test_testEmptyMatrix.ic\" NAME=\"Matrix_Test.testEmptyMatrix Coverage Results\" MODIFIED=\"1698952864568\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$StringCalculator.ic\" NAME=\"StringCalculator Coverage Results\" MODIFIED=\"1698949407232\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/JavaOOP_Labs$CalculatorTest.ic\" NAME=\"CalculatorTest Coverage Results\" MODIFIED=\"1698949460215\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -23,7 +23,6 @@
+       <change beforePath="$PROJECT_DIR$/lab2/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/lab2/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/lab2/build/tmp/compileTestJava/compileTransaction/stash-dir/Matrix_Test.class.uniqueId0" beforeDir="false" afterPath="$PROJECT_DIR$/lab2/build/tmp/compileTestJava/compileTransaction/stash-dir/Matrix_Test.class.uniqueId0" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/lab2/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/lab2/build/tmp/compileTestJava/previous-compilation-data.bin" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/lab2/src/main/java/ImmutableMatrix.java" beforeDir="false" afterPath="$PROJECT_DIR$/lab2/src/main/java/ImmutableMatrix.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/lab2/src/test/java/Matrix_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/lab2/src/test/java/Matrix_Test.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -117,7 +116,7 @@
+       <recent name="" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="Gradle.Matrix_Test.testLowerTriangularMatrix">
++  <component name="RunManager" selected="Gradle.Matrix_Test">
+     <configuration name="Matrix_Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+       <ExternalSystemSettings>
+         <option name="executionName" />
+@@ -142,7 +141,7 @@
+       <RunAsTest>true</RunAsTest>
+       <method v="2" />
+     </configuration>
+-    <configuration name="Matrix_Test.testDiagonalMatrixCreation" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++    <configuration name="Matrix_Test.testGetDimension" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+       <ExternalSystemSettings>
+         <option name="executionName" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$/lab2" />
+@@ -155,7 +154,7 @@
+           <list>
+             <option value=":test" />
+             <option value="--tests" />
+-            <option value="&quot;Matrix_Test.testDiagonalMatrixCreation&quot;" />
++            <option value="&quot;Matrix_Test.testGetDimension&quot;" />
+           </list>
+         </option>
+         <option name="vmOptions" />
+@@ -166,7 +165,7 @@
+       <RunAsTest>true</RunAsTest>
+       <method v="2" />
+     </configuration>
+-    <configuration name="Matrix_Test.testIdentityMatrixCreation" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++    <configuration name="Matrix_Test.testGetDimensions" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+       <ExternalSystemSettings>
+         <option name="executionName" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$/lab2" />
+@@ -179,7 +178,7 @@
+           <list>
+             <option value=":test" />
+             <option value="--tests" />
+-            <option value="&quot;Matrix_Test.testIdentityMatrixCreation&quot;" />
++            <option value="&quot;Matrix_Test.testGetDimensions&quot;" />
+           </list>
+         </option>
+         <option name="vmOptions" />
+@@ -239,19 +238,19 @@
+       <method v="2" />
+     </configuration>
+     <list>
+-      <item itemvalue="Gradle.Matrix_Test.testDiagonalMatrixCreation" />
+-      <item itemvalue="Gradle.Matrix_Test.testIdentityMatrixCreation" />
++      <item itemvalue="Gradle.Matrix_Test.testGetDimension" />
++      <item itemvalue="Gradle.Matrix_Test.testGetDimensions" />
+       <item itemvalue="Gradle.Matrix_Test.testLowerTriangularMatrix" />
+       <item itemvalue="Gradle.Matrix_Test.testUpperTriangularMatrix" />
+       <item itemvalue="Gradle.Matrix_Test" />
+     </list>
+     <recent_temporary>
+       <list>
++        <item itemvalue="Gradle.Matrix_Test" />
++        <item itemvalue="Gradle.Matrix_Test.testGetDimensions" />
++        <item itemvalue="Gradle.Matrix_Test.testGetDimension" />
+         <item itemvalue="Gradle.Matrix_Test.testLowerTriangularMatrix" />
+         <item itemvalue="Gradle.Matrix_Test.testUpperTriangularMatrix" />
+-        <item itemvalue="Gradle.Matrix_Test" />
+-        <item itemvalue="Gradle.Matrix_Test.testIdentityMatrixCreation" />
+-        <item itemvalue="Gradle.Matrix_Test.testDiagonalMatrixCreation" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -284,7 +283,7 @@
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix.ic" NAME="Matrix Coverage Results" MODIFIED="1698949285592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+     <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix_Test_testCreateMatrix.ic" NAME="Matrix_Test.testCreateMatrix Coverage Results" MODIFIED="1698952932731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+-    <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix_Test.ic" NAME="Matrix_Test Coverage Results" MODIFIED="1699026129516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
++    <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix_Test.ic" NAME="Matrix_Test Coverage Results" MODIFIED="1699030121329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+     <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix_Test_testFillMatrix.ic" NAME="Matrix_Test.testFillMatrix Coverage Results" MODIFIED="1698966731654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+     <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix_Test_testImmutability.ic" NAME="Matrix_Test.testImmutability Coverage Results" MODIFIED="1698965158806" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+     <SUITE FILE_PATH="coverage/JavaOOP_Labs$Matrix_Test_testEmptyMatrix.ic" NAME="Matrix_Test.testEmptyMatrix Coverage Results" MODIFIED="1698952864568" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
