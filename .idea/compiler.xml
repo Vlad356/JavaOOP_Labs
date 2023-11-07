@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+<<<<<<< HEAD
       <module name="lab1" target="17" />
       <module name="lab1.main" target="17" />
       <module name="lab1.test" target="17" />
@@ -10,6 +11,10 @@
       <module name="lab2.src.test.java.main" target="17" />
       <module name="lab2.src.test.java.test" target="17" />
       <module name="lab2.test" target="17" />
+=======
+      <module name="lab2.src.test.java.main" target="17" />
+      <module name="lab2.src.test.java.test" target="17" />
+>>>>>>> maib
     </bytecodeTargetLevel>
   </component>
 </project>
