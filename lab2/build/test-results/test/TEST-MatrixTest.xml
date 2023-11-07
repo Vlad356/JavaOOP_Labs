@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MatrixTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2023-11-07T23:00:25" hostname="DESKTOP-CD7ADQ1" time="0.038">
+  <properties/>
+  <testcase name="testShowElement()" classname="MatrixTest" time="0.027"/>
+  <testcase name="testFillMatrix()" classname="MatrixTest" time="0.004"/>
+  <testcase name="testShowColumn()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testEmptyMatrix()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testMatrixDimension()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testMatrixCopy()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testShowRow()" classname="MatrixTest" time="0.0"/>
+  <system-out><![CDATA[Element:
+Row:
+Column:
+Column:
+Column:
+Column:
+Column:
+Row:
+Row:
+Row:
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
