@@ -1,20 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MatrixTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2023-11-07T23:00:25" hostname="DESKTOP-CD7ADQ1" time="0.038">
+<testsuite name="MatrixTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2023-11-09T20:49:38" hostname="DESKTOP-CD7ADQ1" time="0.102">
   <properties/>
-  <testcase name="testShowElement()" classname="MatrixTest" time="0.027"/>
-  <testcase name="testFillMatrix()" classname="MatrixTest" time="0.004"/>
-  <testcase name="testShowColumn()" classname="MatrixTest" time="0.001"/>
-  <testcase name="testEmptyMatrix()" classname="MatrixTest" time="0.001"/>
-  <testcase name="testMatrixDimension()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testShowElement()" classname="MatrixTest" time="0.037"/>
+  <testcase name="testIdentityMatrix()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testFillMatrix()" classname="MatrixTest" time="0.003"/>
+  <testcase name="testInverseMatrix()" classname="MatrixTest" time="0.042"/>
+  <testcase name="testMatrixEquality()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testScalarMultiply()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testShowColumn()" classname="MatrixTest" time="0.0"/>
+  <testcase name="testMultiplyMatrix()" classname="MatrixTest" time="0.0"/>
+  <testcase name="testTransposeMatrix()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testEmptyMatrix()" classname="MatrixTest" time="0.0"/>
+  <testcase name="testMatrixDimension()" classname="MatrixTest" time="0.0"/>
+  <testcase name="testAddMatrix()" classname="MatrixTest" time="0.001"/>
   <testcase name="testMatrixCopy()" classname="MatrixTest" time="0.001"/>
-  <testcase name="testShowRow()" classname="MatrixTest" time="0.0"/>
+  <testcase name="testShowRow()" classname="MatrixTest" time="0.001"/>
+  <testcase name="testDiagonalMatrix()" classname="MatrixTest" time="0.001"/>
   <system-out><![CDATA[Element:
+Element:
+Element:
+Element:
+Element:
+Element:
+Element:
+Row:
+Column:
+Row:
+Row:
+Row:
+Row:
+Column:
+Row:
+Row:
+Row:
+Row:
+Row:
+Column:
+Row:
 Row:
 Column:
 Column:
-Column:
-Column:
-Column:
+Row:
+Row:
 Row:
 Row:
 Row:
