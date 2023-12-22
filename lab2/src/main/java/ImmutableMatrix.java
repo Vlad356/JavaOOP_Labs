@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
@@ -213,28 +215,72 @@ public final class ImmutableMatrix {
         return new ImmutableMatrix(randomColumnData);
     }
 
-    // Method for matrix inversion (returns a new matrix)
-    public ImmutableMatrix inverseMatrix() {
-        if (this.rows != this.cols) {
-            throw new IllegalArgumentException("Matrix must be square for inversion.");
+    private double determinant(double[][] matrix) {
+        double det = 0;
+        if (matrix.length == 1) {
+            return matrix[0][0];
         }
-
-        try {
-            RealMatrix realMatrix = MatrixUtils.createRealMatrix(this.data);
-            RealMatrix inverseMatrix = MatrixUtils.inverse(realMatrix);
-
-            double[][] resultData = new double[this.rows][this.cols];
-            for (int i = 0; i < this.rows; i++) {
-                for (int j = 0; j < this.cols; j++) {
-                    double roundedValue = Math.round(inverseMatrix.getEntry(i, j) * 10.0) / 10.0;
-                    resultData[i][j] = roundedValue;
+        if (matrix.length == 2) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+        for (int i = 0; i < matrix[0].length; i++) {
+            double[][] subMatrix = new double[matrix.length - 1][matrix[0].length - 1];
+            for (int m = 1; m < matrix.length; m++) {
+                for (int n = 0; n < matrix[0].length; n++) {
+                    if (n < i) {
+                        subMatrix[m - 1][n] = matrix[m][n];
+                    } else if (n > i) {
+                        subMatrix[m - 1][n - 1] = matrix[m][n];
+                    }
                 }
             }
-
-            return new ImmutableMatrix(resultData);
-        } catch (SingularMatrixException e) {
-            throw new IllegalArgumentException("Matrix is singular and cannot be inverted.");
+            det += matrix[0][i] * Math.pow(-1, i) * determinant(subMatrix);
         }
+        return det;
+    }
+
+    public void fillWithRandomValues(double min, double max, int decimalPlaces) {
+        Random random = new Random();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                double value = min + (max - min) * random.nextDouble();
+                BigDecimal bd = new BigDecimal(value).setScale(decimalPlaces, RoundingMode.HALF_UP);
+                data[i][j] = bd.doubleValue();
+            }
+        }
+    }
+
+    private double[][] adjoint(double[][] matrix) {
+        double[][] adj = new double[matrix.length][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                adj[i][j] = Math.pow(-1, i + j) * determinant(minor(matrix, i, j));
+            }
+        }
+        return transpose(adj);
+    }
+
+    private double[][] minor(double[][] matrix, int row, int col) {
+        double[][] minor = new double[matrix.length - 1][matrix.length - 1];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                if (i != row && j != col) {
+                    minor[i < row ? i : i - 1][j < col ? j : j - 1] = matrix[i][j];
+                }
+            }
+        }
+        return minor;
+    }
+
+
+    private double[][] transpose(double[][] matrix) {
+        double[][] transposedMatrix = new double[matrix.length][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                transposedMatrix[j][i] = matrix[i][j];
+            }
+        }
+        return transposedMatrix;
     }
 
     public ImmutableMatrix(Matrix mutableMatrix) {
